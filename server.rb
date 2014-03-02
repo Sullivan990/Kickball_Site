@@ -1,38 +1,44 @@
+#set :views, File.dirname(__FILE__) + '/views'
 require 'sinatra'
-require 'pry'
 require 'csv'
+require 'pry'
 
-set :public_folder, File.dirname(__FILE__) + '/public'
-set :views, File.dirname(__FILE__) + '/views'
 
-league = {}
-id = 0
 
-CSV.foreach("public/data.csv", headers: true) do |row|
-  league["player_#{id}".to_sym] = {
-    first_name: row[0],
-    last_name: row[1],
-    position: row[2],
-    team: row[3]
-  }
-  id += 1
+before do
+  @teams = {}
+
+ CSV.foreach('roster.csv', headers: true) do |row|
+
+    if @teams[row[3]].is_a?(Array)
+        @teams[row[3]] << {
+        first: row[0],
+        last: row[1],
+        position: row[2]
+    }
+    else
+        @teams[row[3]] = []
+        @teams[row[3]] << {
+        first: row[0],
+        last: row[1],
+        position: row[2]
+      }
+    end
+end
+  @team_names = @teams.keys
 end
 
 get '/' do
-  html = '''
-  <!DOCTYPE html>
-  <html lang="en">
-    <head>
-      <title>LACKP League of Cool Kickball Professionals</title>
-      <link rel="stylesheet" href="home.css" />
-    </head>
-    <body>
-    <h1>League of Cool Kickball Professionals</h1>
-    <p>Placeholder</p>
-    </body>
-  '''
+  erb :index
 end
 
 get '/:team' do
-  erb :team
+  @name = params[:team]
+  erb :teams
 end
+
+set :views_folder, File.dirname(__FILE__) + '/views'
+
+
+
+
