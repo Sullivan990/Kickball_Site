@@ -8,7 +8,7 @@ require 'pry'
 before do
   @teams = {}
 
- CSV.foreach('roster.csv', headers: true) do |row|
+ CSV.foreach('public/roster.csv', headers: true) do |row|
 
     if @teams[row[3]].is_a?(Array)
         @teams[row[3]] << {

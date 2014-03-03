@@ -1,10 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+  <title>Kickball</title>
+</head>
+
+<body>
   <h2>Kickball League Teams</h2>
   <% @team_names.each do |name| %>
   <ul>
      <li><a href="/<%= name %>"><%= name %></a></li>
   </ul>
   <% end %>
-
+</body>
 
 
